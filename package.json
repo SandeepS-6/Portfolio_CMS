@@ -10,14 +10,12 @@
     "start": "vite preview --host 0.0.0.0 --port ${PORT:-4174}"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^6.0.3",
     "axios": "^1.11.0",
     "lucide-react": "^1.26.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-router-dom": "^7.18.1"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^6.0.3",
+    "react-router-dom": "^7.18.1",
     "vite": "^8.1.1"
   }
 }

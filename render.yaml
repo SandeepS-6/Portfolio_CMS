@@ -5,7 +5,8 @@ services:
     runtime: static
     plan: free
     branch: main
-    buildCommand: npm ci && npm run build
+    # Install is inside package.json "build" so a plain `npm run build` works on Render.
+    buildCommand: npm run build
     staticPublishPath: ./dist
     routes:
       - type: rewrite

@@ -1,0 +1,230 @@
+.admin {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.admin__sidebar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 1.1rem 0.85rem;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-sidebar);
+}
+
+.admin__brand-block {
+  padding: 0.35rem 0.7rem 1rem;
+}
+
+.admin__brand {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+.admin__user {
+  margin: 0.15rem 0 0;
+  font-size: 0.72rem;
+  color: var(--color-text-soft);
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+.admin__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 0.15rem 0.5rem;
+  scrollbar-width: thin;
+}
+
+.admin__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.admin__group-label {
+  margin: 0 0 0.25rem;
+  padding: 0 0.7rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+
+.admin__link {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background 0.12s var(--ease),
+    color 0.12s var(--ease);
+}
+
+.admin__link svg {
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.admin__link:hover {
+  background: var(--color-bg-soft);
+  color: var(--color-text);
+}
+
+.admin__link:hover svg {
+  opacity: 1;
+}
+
+.admin__link--active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+  font-weight: 600;
+}
+
+.admin__link--active svg {
+  opacity: 1;
+  color: var(--color-primary);
+}
+
+.admin__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 0.4rem 0.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.admin__logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  padding: 0.55rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    border-color 0.12s var(--ease),
+    color 0.12s var(--ease),
+    background 0.12s var(--ease);
+}
+
+.admin__logout:hover {
+  border-color: var(--color-danger-border);
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+}
+
+.admin__shell {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.admin__topbar {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  height: var(--topbar-height);
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.admin__menu-btn {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.admin__topbar-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.admin__main {
+  flex: 1;
+  padding: var(--page-pad);
+}
+
+.admin__backdrop {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .admin {
+    grid-template-columns: 1fr;
+  }
+
+  .admin__topbar {
+    display: flex;
+  }
+
+  .admin__sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(18rem, 86vw);
+    transform: translateX(-105%);
+    transition: transform 0.22s var(--ease);
+    box-shadow: var(--shadow-md);
+    z-index: 40;
+  }
+
+  .admin--nav-open .admin__sidebar {
+    transform: translateX(0);
+  }
+
+  .admin__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: var(--color-overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s var(--ease);
+    z-index: 35;
+  }
+
+  .admin--nav-open .admin__backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .admin__main {
+    padding: 1.15rem;
+  }
+}

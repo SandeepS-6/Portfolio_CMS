@@ -1,0 +1,29 @@
+.interactive-grid {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: auto;
+  height: auto;
+  max-width: none;
+  transform: translate(-50%, -50%) skewY(10deg);
+  transform-origin: center;
+  pointer-events: auto;
+  border: 0;
+  overflow: visible;
+  opacity: 0.42;
+}
+
+.interactive-grid__cell {
+  fill: transparent;
+  stroke: color-mix(in srgb, var(--color-text) 5%, transparent);
+  stroke-width: 1;
+  transition:
+    fill 900ms ease,
+    stroke 900ms ease;
+}
+
+.interactive-grid__cell--hovered {
+  fill: var(--color-primary-soft);
+  stroke: var(--color-primary-ring);
+  transition-duration: 90ms;
+}

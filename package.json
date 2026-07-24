@@ -7,7 +7,7 @@
     "dev": "vite --port 5174",
     "build": "npm install && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "start": "vite preview --host 0.0.0.0 --port ${PORT:-4174}"
+    "start": "node scripts/serve-dist.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^6.0.3",
@@ -16,6 +16,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1",
+    "serve": "^14.2.6",
     "vite": "^8.1.1"
   }
 }

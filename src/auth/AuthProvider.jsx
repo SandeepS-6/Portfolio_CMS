@@ -44,6 +44,18 @@ export function AuthProvider({ children }) {
   }, []);
 
   const completeOAuthSession = useCallback(async () => {
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const accessToken = hash.get("access_token");
+
+    if (accessToken) {
+      const user = await authApi.me(accessToken);
+      setAccessToken(accessToken);
+      setUser(user);
+      setStatus("authenticated");
+      window.history.replaceState(null, "", window.location.pathname);
+      return user;
+    }
+
     const data = await authApi.refresh();
     setAccessToken(data.accessToken);
     setUser(data.user);

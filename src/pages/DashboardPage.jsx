@@ -81,7 +81,7 @@ function DashboardPage() {
         actions={
           <a
             className="btn btn--ghost btn--sm"
-            href={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/docs`}
+            href={`${import.meta.env.VITE_API_URL }/api/docs`}
             target="_blank"
             rel="noreferrer"
           >

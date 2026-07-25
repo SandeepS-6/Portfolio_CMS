@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --port 5174",
     "build": "npm install && vite build",
-    "preview": "vite preview --host 0.0.0.0",
+    "preview": "node scripts/serve-dist.mjs",
     "start": "node scripts/serve-dist.mjs"
   },
   "dependencies": {

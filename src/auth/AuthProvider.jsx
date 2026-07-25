@@ -28,11 +28,20 @@ export function AuthProvider({ children }) {
     if (bootStarted.current) return;
     bootStarted.current = true;
 
+    const path = window.location.pathname;
+    const isPublicAuth =
+      path.startsWith("/login") ||
+      path.startsWith("/forgot-password") ||
+      path.startsWith("/reset-password");
+
     // OAuth callback carries the token in the hash — let that page finish login.
-    if (
-      window.location.pathname.includes("/oauth/callback") &&
-      oauthAccessTokenFromHash()
-    ) {
+    if (path.includes("/oauth/callback") && oauthAccessTokenFromHash()) {
+      return;
+    }
+
+    // Login pages: no cookie expected → skip refresh (avoids noisy 401 in console).
+    if (isPublicAuth) {
+      setStatus("anonymous");
       return;
     }
 

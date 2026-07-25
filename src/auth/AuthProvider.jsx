@@ -12,14 +12,29 @@ import { clearAccessToken, setAccessToken } from "./tokenStore";
 
 const AuthContext = createContext(null);
 
+function oauthAccessTokenFromHash() {
+  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  return hash.get("access_token");
+}
+
 export function AuthProvider({ children }) {
   const [status, setStatus] = useState("booting"); // booting | authenticated | anonymous
   const [user, setUser] = useState(null);
   const bootStarted = useRef(false);
+  const statusRef = useRef(status);
+  statusRef.current = status;
 
   useEffect(() => {
     if (bootStarted.current) return;
     bootStarted.current = true;
+
+    // OAuth callback carries the token in the hash — let that page finish login.
+    if (
+      window.location.pathname.includes("/oauth/callback") &&
+      oauthAccessTokenFromHash()
+    ) {
+      return;
+    }
 
     authApi
       .refresh()
@@ -29,6 +44,8 @@ export function AuthProvider({ children }) {
         setStatus("authenticated");
       })
       .catch(() => {
+        // Don't wipe a session that OAuth just established
+        if (statusRef.current === "authenticated") return;
         clearAccessToken();
         setUser(null);
         setStatus("anonymous");
@@ -44,16 +61,15 @@ export function AuthProvider({ children }) {
   }, []);
 
   const completeOAuthSession = useCallback(async () => {
-    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-    const accessToken = hash.get("access_token");
+    const accessToken = oauthAccessTokenFromHash();
 
     if (accessToken) {
-      const user = await authApi.me(accessToken);
+      const me = await authApi.me(accessToken);
       setAccessToken(accessToken);
-      setUser(user);
+      setUser(me);
       setStatus("authenticated");
       window.history.replaceState(null, "", window.location.pathname);
-      return user;
+      return me;
     }
 
     const data = await authApi.refresh();

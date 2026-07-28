@@ -73,6 +73,16 @@ export const heroApi = {
   update: (body) => api.put("/api/hero", body).then((r) => r.data),
 };
 
+export const whatIDoApi = {
+  get: () => api.get("/api/what-i-do").then((r) => r.data),
+  update: (body) => api.put("/api/what-i-do", body).then((r) => r.data),
+};
+
+export const skillsSectionApi = {
+  get: () => api.get("/api/skills-section").then((r) => r.data),
+  update: (body) => api.put("/api/skills-section", body).then((r) => r.data),
+};
+
 export const skillsApi = {
   list: () => api.get("/api/skills").then((r) => r.data),
   create: (body) => api.post("/api/skills", body).then((r) => r.data),

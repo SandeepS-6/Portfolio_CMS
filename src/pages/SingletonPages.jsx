@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
-import { contactInfoApi, footerApi, settingsApi } from "../services/api";
+import { contactInfoApi, footerApi } from "../services/api";
 import {
   Field,
   LoadingBlock,
@@ -175,26 +175,6 @@ export function FooterPage() {
         "description",
         "copyright",
         "resumeUrl",
-      ]}
-    />
-  );
-}
-
-export function SettingsPage() {
-  return (
-    <SingletonPage
-      eyebrow="Site"
-      title="Site Settings"
-      lead="Site-wide metadata, branding, and maintenance flag."
-      load={settingsApi.get}
-      save={settingsApi.update}
-      fields={[
-        "siteTitle",
-        "siteDescription",
-        "logoText",
-        "primaryColor",
-        "seoKeywords",
-        "maintenanceMode",
       ]}
     />
   );

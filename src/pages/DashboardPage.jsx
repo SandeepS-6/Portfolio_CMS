@@ -11,6 +11,8 @@ import {
   GraduationCap,
   Inbox,
   Layers,
+  ListTodo,
+  PanelsTopLeft,
   Phone,
   Settings,
   Share2,
@@ -27,7 +29,9 @@ import "./pages.css";
 
 const modules = [
   { to: "/hero", label: "Hero", note: "Identity and opening pitch", icon: Sparkles, group: "Content" },
-  { to: "/skills", label: "Skills", note: "Floating badge content", icon: Layers, group: "Content" },
+  { to: "/what-i-do", label: "What I Do", note: "Capability cards and process", icon: ListTodo, group: "Content" },
+  { to: "/skills", label: "Skill Badges", note: "Floating hero badges", icon: Layers, group: "Content" },
+  { to: "/skills-section", label: "Skills Section", note: "Technologies I Work With", icon: PanelsTopLeft, group: "Content" },
   { to: "/projects", label: "Projects", note: "Selected work entries", icon: FolderKanban, group: "Content" },
   { to: "/experience", label: "Experience", note: "Roles and timeline", icon: Briefcase, group: "Content" },
   { to: "/education", label: "Education", note: "Schools and degrees", icon: GraduationCap, group: "Content" },

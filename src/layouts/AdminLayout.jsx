@@ -10,6 +10,8 @@ import {
   Inbox,
   LayoutDashboard,
   Layers,
+  ListTodo,
+  PanelsTopLeft,
   LogOut,
   Menu,
   Phone,
@@ -17,7 +19,6 @@ import {
   Share2,
   Sparkles,
   FolderKanban,
-  PanelsTopLeft,
   X,
 } from "lucide-react";
 import { useAuth } from "../auth/AuthProvider";
@@ -32,7 +33,9 @@ const groups = [
     label: "Content",
     links: [
       { to: "/hero", label: "Hero", icon: Sparkles },
-      { to: "/skills", label: "Skills", icon: Layers },
+      { to: "/what-i-do", label: "What I Do", icon: ListTodo },
+      { to: "/skills", label: "Skill Badges", icon: Layers },
+      { to: "/skills-section", label: "Skills Section", icon: PanelsTopLeft },
       { to: "/projects", label: "Projects", icon: FolderKanban },
       { to: "/projects-section", label: "Projects Section", icon: PanelsTopLeft },
       { to: "/experience", label: "Experience", icon: Briefcase },

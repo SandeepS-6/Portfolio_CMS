@@ -8,12 +8,15 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage";
 import DashboardPage from "./pages/DashboardPage";
 import HeroPage from "./pages/HeroPage";
+import WhatIDoPage from "./pages/WhatIDoPage";
 import SkillsPage from "./pages/SkillsPage";
+import SkillsSectionPage from "./pages/SkillsSectionPage";
 import ResourcePage from "./pages/ResourcePage";
 import MessagesPage from "./pages/MessagesPage";
 import MeetingSettingsPage from "./pages/MeetingSettingsPage";
 import MeetingBookingsPage from "./pages/MeetingBookingsPage";
-import { ContactInfoPage, FooterPage, SettingsPage } from "./pages/SingletonPages";
+import SettingsPage from "./pages/SettingsPage";
+import { ContactInfoPage, FooterPage } from "./pages/SingletonPages";
 import {
   projectsApi,
   experienceApi,
@@ -37,7 +40,9 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route index element={<DashboardPage />} />
               <Route path="hero" element={<HeroPage />} />
+              <Route path="what-i-do" element={<WhatIDoPage />} />
               <Route path="skills" element={<SkillsPage />} />
+              <Route path="skills-section" element={<SkillsSectionPage />} />
               <Route
                 path="projects"
                 element={

@@ -9,7 +9,7 @@ import {
   guessTechIcon,
   lookupTechMeta,
   TECH_SUGGESTIONS,
-} from "../tech/techMeta";
+} from "../../tech/techMeta";
 import "./TechStackField.css";
 
 function parseItems(value) {

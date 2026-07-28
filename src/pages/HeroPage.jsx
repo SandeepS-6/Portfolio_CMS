@@ -42,8 +42,8 @@ function HeroPage() {
           greeting: data.greeting || "",
           headline: data.headline || "",
           bio: data.bio || "",
-          ctaLabel: data.primaryCta?.label || "View My Work",
-          ctaHref: data.primaryCta?.href || "#projects",
+          ctaLabel: data.primaryCta?.label || "Know me better",
+          ctaHref: data.primaryCta?.href || "#about",
         });
       })
       .catch((err) => setStatus(err.message));
@@ -84,7 +84,7 @@ function HeroPage() {
       <PageHeader
         eyebrow="Content"
         title="Hero"
-        lead="Identity and opening pitch shown on the public homepage."
+        lead="Centered story hero: name, headline, subtitle, intro, and CTA."
       />
 
       <Panel title="Hero content" meta="Updates appear on the live site after save">

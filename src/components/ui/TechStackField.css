@@ -1,0 +1,111 @@
+.tech-stack-field__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+  min-height: 2rem;
+}
+
+.tech-stack-field__empty {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--color-text-soft);
+}
+
+.tech-stack-field__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.35rem 0.28rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+}
+
+.tech-stack-field__chip-icon {
+  width: 0.88rem;
+  height: 0.88rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.tech-stack-field__chip-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.tech-stack-field__chip-slug {
+  width: 5.5rem;
+  padding: 0.15rem 0.35rem;
+  border: 1px solid transparent;
+  border-radius: 0.35rem;
+  background: var(--color-bg-soft, #f3f3f7);
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+}
+
+.tech-stack-field__chip-slug:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: var(--color-surface);
+}
+
+.tech-stack-field__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-soft);
+  cursor: pointer;
+}
+
+.tech-stack-field__remove:hover {
+  background: color-mix(in srgb, var(--color-danger, #c44) 12%, transparent);
+  color: var(--color-danger, #c44);
+}
+
+.tech-stack-field__add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tech-stack-field__inputs {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(7rem, 0.85fr);
+  gap: 0.45rem;
+  flex: 1;
+  min-width: min(100%, 18rem);
+}
+
+.tech-stack-field__inputs input {
+  width: 100%;
+}
+
+.tech-stack-field__preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background: var(--color-bg-soft, #f3f3f7);
+}
+
+.tech-stack-field__preview img {
+  width: 1.1rem;
+  height: 1.1rem;
+  object-fit: contain;
+}
+
+.tech-stack-field__preview-empty {
+  font-size: 0.75rem;
+  color: var(--color-text-soft);
+}

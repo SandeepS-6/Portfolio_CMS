@@ -8,10 +8,22 @@ import {
   Panel,
   SearchToolbar,
   StatusBanner,
+  TechStackField,
   Toggle,
   labelize,
 } from "../components/ui";
 import "./pages.css";
+
+function parseTechStackField(raw) {
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw !== "string" || !raw.trim()) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
 
 function ResourcePage({ title, api, fields, required = [], lead }) {
   const [items, setItems] = useState([]);
@@ -47,6 +59,25 @@ function ResourcePage({ title, api, fields, required = [], lead }) {
     try {
       const body = { ...form };
       fields.forEach((f) => {
+        if (f.type === "techStack") {
+          const items = parseTechStackField(body[f.name]);
+          body.techStack = items
+            .map((entry) => (typeof entry === "string" ? entry : entry?.name))
+            .filter(Boolean);
+          body.techDetails = items
+            .map((entry) => {
+              if (typeof entry === "string") return { name: entry };
+              if (!entry?.name) return null;
+              return {
+                name: entry.name,
+                ...(entry.icon ? { icon: entry.icon } : {}),
+                ...(entry.color ? { color: entry.color } : {}),
+                ...(entry.category ? { category: entry.category } : {}),
+              };
+            })
+            .filter(Boolean);
+          return;
+        }
         if (f.type === "json" && typeof body[f.name] === "string" && body[f.name]) {
           body[f.name] = JSON.parse(body[f.name]);
         }
@@ -97,6 +128,15 @@ function ResourcePage({ title, api, fields, required = [], lead }) {
                 checked={!!form[f.name]}
                 onChange={onChange}
                 label={labelize(f.name)}
+              />
+            ) : f.type === "techStack" ? (
+              <TechStackField
+                key={f.name}
+                name={f.name}
+                label={labelize(f.name)}
+                value={form[f.name] || "[]"}
+                onChange={onChange}
+                hint={f.hint}
               />
             ) : (
               <Field

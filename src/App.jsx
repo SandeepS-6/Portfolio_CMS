@@ -58,9 +58,9 @@ function App() {
                       { name: "docsUrl" },
                       {
                         name: "techStack",
-                        type: "json",
-                        placeholder: '["React","Node"]',
+                        type: "techStack",
                         defaultValue: "[]",
+                        hint: "Type a name (React, Node…) — icon resolves automatically. Edit the slug to override.",
                       },
                       {
                         name: "features",

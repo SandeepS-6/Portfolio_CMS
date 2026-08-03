@@ -19,7 +19,19 @@
 }
 
 .admin__brand-block {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   padding: 0.35rem 0.7rem 1rem;
+}
+
+.admin__brand-mark {
+  flex: 0 0 auto;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(15, 15, 20, 0.08);
 }
 
 .admin__brand {

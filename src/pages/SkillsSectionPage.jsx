@@ -3,6 +3,7 @@ import { Plus, Save, Trash2 } from "lucide-react";
 import { skillsSectionApi } from "../services/api";
 import {
   Field,
+  FileUpload,
   LoadingBlock,
   PageHeader,
   Panel,
@@ -163,13 +164,12 @@ function TechRows({
               hint="Hex without # — brand tint for the icon"
             />
             {showSrc ? (
-              <Field
-                label="Custom icon URL"
+              <FileUpload
+                label="Custom icon"
                 value={tech.src || ""}
-                onChange={(e) => setTech(index, { src: e.target.value })}
-                placeholder="https://…"
+                accept="image/*"
+                onChange={(url) => setTech(index, { src: url })}
                 hint="Optional. Leave blank to use Simple Icons from the slug."
-                full
               />
             ) : null}
           </div>
@@ -612,6 +612,7 @@ function SkillsSectionPage() {
             techs={form.favourites.techs}
             title="Favourite technologies"
             note="Icons listed in the Favourite Tech side panel."
+            showSrc
             onChange={(techs) => setNested("favourites", "techs", techs)}
           />
         </Panel>
@@ -683,6 +684,18 @@ function SkillsSectionPage() {
                 })
               }
             />
+            <FileUpload
+              label="Custom tech icon"
+              value={form.learning.tech.src || ""}
+              accept="image/*"
+              onChange={(url) =>
+                setNested("learning", "tech", {
+                  ...form.learning.tech,
+                  src: url,
+                })
+              }
+              hint="Optional override — leave blank to use Simple Icons"
+            />
           </div>
         </Panel>
 
@@ -703,6 +716,7 @@ function SkillsSectionPage() {
             techs={form.marquee.techs}
             title="Marquee technologies"
             note="Icons that scroll in the strip at the bottom of the section."
+            showSrc
             onChange={(techs) => setNested("marquee", "techs", techs)}
           />
         </Panel>

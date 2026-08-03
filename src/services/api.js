@@ -68,9 +68,42 @@ api.interceptors.response.use(
 
 export default api;
 
+export const uploadApi = {
+  upload: (file) => {
+    const body = new FormData();
+    body.append("file", file);
+    return api
+      .post("/api/uploads", body, {
+        timeout: 60000,
+        headers: {
+          "Content-Type": false,
+        },
+        transformRequest: [
+          (data, headers) => {
+            if (typeof FormData !== "undefined" && data instanceof FormData) {
+              if (headers && typeof headers.delete === "function") {
+                headers.delete("Content-Type");
+              } else if (headers) {
+                delete headers["Content-Type"];
+                delete headers["content-type"];
+              }
+            }
+            return data;
+          },
+        ],
+      })
+      .then((r) => r.data);
+  },
+};
+
 export const heroApi = {
   get: () => api.get("/api/hero").then((r) => r.data),
   update: (body) => api.put("/api/hero", body).then((r) => r.data),
+};
+
+export const aboutApi = {
+  get: () => api.get("/api/about").then((r) => r.data),
+  update: (body) => api.put("/api/about", body).then((r) => r.data),
 };
 
 export const whatIDoApi = {
@@ -155,6 +188,7 @@ export const meetingApi = {
   getSettings: () => api.get("/api/meeting").then((r) => r.data),
   updateSettings: (body) => api.put("/api/meeting", body).then((r) => r.data),
   listBookings: () => api.get("/api/meeting/bookings").then((r) => r.data),
+  getAnalytics: () => api.get("/api/meeting/analytics").then((r) => r.data),
   cancelBooking: (id) =>
     api.patch(`/api/meeting/bookings/${id}`).then((r) => r.data),
   removeBooking: (id) =>

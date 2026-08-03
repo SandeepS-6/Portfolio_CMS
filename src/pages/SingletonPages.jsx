@@ -3,6 +3,7 @@ import { Save } from "lucide-react";
 import { contactInfoApi, footerApi } from "../services/api";
 import {
   Field,
+  FileUpload,
   LoadingBlock,
   PageHeader,
   Panel,
@@ -12,6 +13,14 @@ import {
 } from "../components/ui";
 import "./pages.css";
 
+function fieldName(field) {
+  return typeof field === "string" ? field : field.name;
+}
+
+function fieldType(field) {
+  return typeof field === "string" ? "text" : field.type || "text";
+}
+
 function SingletonPage({ title, eyebrow, lead, load, save, fields }) {
   const [form, setForm] = useState(null);
   const [status, setStatus] = useState("");
@@ -20,8 +29,11 @@ function SingletonPage({ title, eyebrow, lead, load, save, fields }) {
     load()
       .then((data) => {
         const next = {};
-        fields.forEach((f) => {
-          next[f] = Array.isArray(data[f]) ? data[f].join(", ") : (data[f] ?? "");
+        fields.forEach((field) => {
+          const name = fieldName(field);
+          next[name] = Array.isArray(data[name])
+            ? data[name].join(", ")
+            : (data[name] ?? "");
         });
         setForm(next);
       })
@@ -31,6 +43,10 @@ function SingletonPage({ title, eyebrow, lead, load, save, fields }) {
   function onChange(e) {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+  }
+
+  function setFormField(name, value) {
+    setForm((prev) => ({ ...prev, [name]: value }));
   }
 
   async function onSubmit(e) {
@@ -71,16 +87,35 @@ function SingletonPage({ title, eyebrow, lead, load, save, fields }) {
 
       <Panel title="Settings" meta="Changes sync to the live portfolio API">
         <form className="form form--grid" onSubmit={onSubmit}>
-          {fields.map((name) =>
-            name === "maintenanceMode" ? (
-              <Toggle
-                key={name}
-                name={name}
-                checked={!!form[name]}
-                onChange={onChange}
-                label="Maintenance mode"
-              />
-            ) : (
+          {fields.map((field) => {
+            const name = fieldName(field);
+            const type = fieldType(field);
+
+            if (name === "maintenanceMode") {
+              return (
+                <Toggle
+                  key={name}
+                  name={name}
+                  checked={!!form[name]}
+                  onChange={onChange}
+                  label="Maintenance mode"
+                />
+              );
+            }
+
+            if (type === "image" || type === "file") {
+              return (
+                <FileUpload
+                  key={name}
+                  label={labelize(name)}
+                  value={form[name] || ""}
+                  accept={type === "file" ? "application/pdf,image/*" : "image/*"}
+                  onChange={(url) => setFormField(name, url)}
+                />
+              );
+            }
+
+            return (
               <Field
                 key={name}
                 label={labelize(name)}
@@ -96,8 +131,8 @@ function SingletonPage({ title, eyebrow, lead, load, save, fields }) {
                 value={form[name]}
                 onChange={onChange}
               />
-            ),
-          )}
+            );
+          })}
           <div className="form__footer form__span-full">
             <button type="submit" className="btn">
               <Save size={16} aria-hidden="true" />
@@ -149,6 +184,7 @@ export function FooterPage() {
           description: data.description ?? "",
           copyright: data.copyright ?? "",
           resumeUrl: data.resumeUrl ?? "",
+          logoUrl: data.logo ?? data.logoUrl ?? "",
         };
       }}
       save={async (body) => {
@@ -174,7 +210,8 @@ export function FooterPage() {
         "developerName",
         "description",
         "copyright",
-        "resumeUrl",
+        { name: "logoUrl", type: "image" },
+        { name: "resumeUrl", type: "file" },
       ]}
     />
   );

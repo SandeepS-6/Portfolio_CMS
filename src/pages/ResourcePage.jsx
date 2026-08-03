@@ -3,6 +3,9 @@ import { Plus, Search, Trash2 } from "lucide-react";
 import {
   EmptyState,
   Field,
+  FileUpload,
+  GalleryField,
+  ShowcaseField,
   LoadingBlock,
   PageHeader,
   Panel,
@@ -25,12 +28,26 @@ function parseTechStackField(raw) {
   }
 }
 
+function defaultForField(f) {
+  if (f.defaultValue !== undefined) return f.defaultValue;
+  if (f.type === "gallery") return [];
+  if (f.type === "showcase") {
+    return {
+      desktop: { src: "", alt: "" },
+      tablet: { src: "", alt: "" },
+      mobile: { src: "", alt: "" },
+    };
+  }
+  if (f.type === "checkbox") return false;
+  return "";
+}
+
 function ResourcePage({ title, api, fields, required = [], lead }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [form, setForm] = useState(() =>
-    Object.fromEntries(fields.map((f) => [f.name, f.defaultValue ?? ""])),
+    Object.fromEntries(fields.map((f) => [f.name, defaultForField(f)])),
   );
   const [status, setStatus] = useState("");
 
@@ -53,6 +70,10 @@ function ResourcePage({ title, api, fields, required = [], lead }) {
     }));
   }
 
+  function setFormField(name, value) {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
   async function onCreate(e) {
     e.preventDefault();
     setStatus("Saving...");
@@ -60,11 +81,11 @@ function ResourcePage({ title, api, fields, required = [], lead }) {
       const body = { ...form };
       fields.forEach((f) => {
         if (f.type === "techStack") {
-          const items = parseTechStackField(body[f.name]);
-          body.techStack = items
+          const stackItems = parseTechStackField(body[f.name]);
+          body.techStack = stackItems
             .map((entry) => (typeof entry === "string" ? entry : entry?.name))
             .filter(Boolean);
-          body.techDetails = items
+          body.techDetails = stackItems
             .map((entry) => {
               if (typeof entry === "string") return { name: entry };
               if (!entry?.name) return null;
@@ -78,6 +99,32 @@ function ResourcePage({ title, api, fields, required = [], lead }) {
             .filter(Boolean);
           return;
         }
+        if (f.type === "gallery") {
+          const gallery = (Array.isArray(body[f.name]) ? body[f.name] : [])
+            .filter((item) => item?.src)
+            .map(({ src, alt }) => ({ src, alt: alt || "" }));
+          body[f.name] = gallery;
+          if (!body.coverImage && gallery[0]?.src) {
+            body.coverImage = gallery[0].src;
+            body.coverAlt = gallery[0].alt || body.coverAlt || "";
+          }
+          return;
+        }
+        if (f.type === "showcase") {
+          const raw = body[f.name] && typeof body[f.name] === "object" ? body[f.name] : {};
+          const next = {};
+          for (const slot of ["desktop", "tablet", "mobile"]) {
+            const src =
+              typeof raw[slot] === "string" ? raw[slot] : raw[slot]?.src || "";
+            if (!src) continue;
+            next[slot] = {
+              src,
+              alt: raw[slot]?.alt || slot,
+            };
+          }
+          body[f.name] = next;
+          return;
+        }
         if (f.type === "json" && typeof body[f.name] === "string" && body[f.name]) {
           body[f.name] = JSON.parse(body[f.name]);
         }
@@ -86,7 +133,7 @@ function ResourcePage({ title, api, fields, required = [], lead }) {
         }
       });
       await api.create(body);
-      setForm(Object.fromEntries(fields.map((f) => [f.name, f.defaultValue ?? ""])));
+      setForm(Object.fromEntries(fields.map((f) => [f.name, defaultForField(f)])));
       await load();
       setStatus("Created.");
     } catch (err) {
@@ -136,6 +183,33 @@ function ResourcePage({ title, api, fields, required = [], lead }) {
                 label={labelize(f.name)}
                 value={form[f.name] || "[]"}
                 onChange={onChange}
+                hint={f.hint}
+              />
+            ) : f.type === "gallery" ? (
+              <GalleryField
+                key={f.name}
+                name={f.name}
+                label={f.label || labelize(f.name)}
+                value={form[f.name] || []}
+                onChange={(next) => setFormField(f.name, next)}
+                hint={f.hint}
+                max={f.max}
+              />
+            ) : f.type === "showcase" ? (
+              <ShowcaseField
+                key={f.name}
+                label={f.label || labelize(f.name)}
+                value={form[f.name] || {}}
+                onChange={(next) => setFormField(f.name, next)}
+                hint={f.hint}
+              />
+            ) : f.type === "image" || f.type === "file" ? (
+              <FileUpload
+                key={f.name}
+                label={labelize(f.name)}
+                value={form[f.name] || ""}
+                accept={f.type === "file" ? "application/pdf,image/*" : "image/*"}
+                onChange={(url) => setFormField(f.name, url)}
                 hint={f.hint}
               />
             ) : (
@@ -212,6 +286,9 @@ function ResourcePage({ title, api, fields, required = [], lead }) {
                           item.issuer ||
                           item.slug ||
                           ""}
+                        {Array.isArray(item.gallery) && item.gallery.length > 0
+                          ? ` · ${item.gallery.length} image${item.gallery.length === 1 ? "" : "s"}`
+                          : ""}
                       </p>
                     </div>
                     <div className="list__actions">

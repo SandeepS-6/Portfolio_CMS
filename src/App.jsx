@@ -8,6 +8,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage";
 import DashboardPage from "./pages/DashboardPage";
 import HeroPage from "./pages/HeroPage";
+import AboutPage from "./pages/AboutPage";
 import WhatIDoPage from "./pages/WhatIDoPage";
 import SkillsPage from "./pages/SkillsPage";
 import SkillsSectionPage from "./pages/SkillsSectionPage";
@@ -40,6 +41,7 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route index element={<DashboardPage />} />
               <Route path="hero" element={<HeroPage />} />
+              <Route path="about" element={<AboutPage />} />
               <Route path="what-i-do" element={<WhatIDoPage />} />
               <Route path="skills" element={<SkillsPage />} />
               <Route path="skills-section" element={<SkillsSectionPage />} />
@@ -55,8 +57,13 @@ function App() {
                       { name: "slug", placeholder: "project-atlas" },
                       { name: "summary", type: "textarea" },
                       { name: "description", type: "textarea" },
-                      { name: "coverImage", placeholder: "https://..." },
-                      { name: "coverAlt" },
+                      {
+                        name: "gallery",
+                        type: "gallery",
+                        label: "Project images",
+                        hint: "Upload 2–3 images for the card slideshow (shown one by one). First image is the cover; all appear in the detail gallery.",
+                      },
+                      { name: "coverAlt", placeholder: "Cover / primary alt text" },
                       { name: "liveUrl" },
                       { name: "repoUrl" },
                       { name: "caseStudyUrl" },
@@ -99,10 +106,10 @@ function App() {
                         defaultValue: "{}",
                       },
                       {
-                        name: "gallery",
-                        type: "json",
-                        placeholder: '[{"src":"...","alt":"..."}]',
-                        defaultValue: "[]",
+                        name: "showcase",
+                        type: "showcase",
+                        label: "Responsive showcase",
+                        hint: "Desktop / tablet / mobile frames for the detail page",
                       },
                       { name: "readingTime", placeholder: "6 min" },
                       { name: "seoTitle" },
@@ -165,7 +172,12 @@ function App() {
                     fields={[
                       { name: "title" },
                       { name: "issuer" },
-                      { name: "credentialUrl" },
+                      {
+                        name: "imageUrl",
+                        type: "image",
+                        hint: "Certificate image — drag/drop or browse",
+                      },
+                      { name: "credentialUrl", placeholder: "https://…" },
                       { name: "displayOrder", type: "number", defaultValue: 0 },
                     ]}
                   />

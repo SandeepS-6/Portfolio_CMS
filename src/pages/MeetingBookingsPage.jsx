@@ -13,12 +13,18 @@ import "./pages.css";
 
 function MeetingBookingsPage() {
   const [bookings, setBookings] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
 
   async function load() {
-    setBookings(await meetingApi.listBookings());
+    const [list, stats] = await Promise.all([
+      meetingApi.listBookings(),
+      meetingApi.getAnalytics(),
+    ]);
+    setBookings(list);
+    setAnalytics(stats);
   }
 
   useEffect(() => {
@@ -60,12 +66,61 @@ function MeetingBookingsPage() {
       <PageHeader
         eyebrow="Engage"
         title="Meeting Bookings"
-        lead="Booked calls from the public Let's Talk scheduler."
+        lead="Analytics and booked calls from the public Let's Talk scheduler."
       />
 
       <StatusBanner status={status} />
 
-      <Panel title="Bookings" meta={`${bookings.length} total`} flush>
+      <div className="dash-grid">
+        <article className="stat-card">
+          <p className="stat-card__label">Total</p>
+          <p className="stat-card__value">
+            {analytics?.total ?? (loading ? "…" : "—")}
+          </p>
+          <p className="stat-card__note">All bookings ever</p>
+        </article>
+        <article className="stat-card">
+          <p className="stat-card__label">Confirmed</p>
+          <p className="stat-card__value">
+            {analytics?.confirmed ?? (loading ? "…" : "—")}
+          </p>
+          <p className="stat-card__note">Active confirmed</p>
+        </article>
+        <article className="stat-card">
+          <p className="stat-card__label">Upcoming</p>
+          <p className="stat-card__value">
+            {analytics?.upcoming ?? (loading ? "…" : "—")}
+          </p>
+          <p className="stat-card__note">Still ahead</p>
+        </article>
+        <article className="stat-card">
+          <p className="stat-card__label">This month</p>
+          <p className="stat-card__value">
+            {analytics?.thisMonth ?? (loading ? "…" : "—")}
+          </p>
+          <p className="stat-card__note">Created in last 30 days</p>
+        </article>
+        <article className="stat-card">
+          <p className="stat-card__label">This week</p>
+          <p className="stat-card__value">
+            {analytics?.thisWeek ?? (loading ? "…" : "—")}
+          </p>
+          <p className="stat-card__note">Created in last 7 days</p>
+        </article>
+        <article className="stat-card">
+          <p className="stat-card__label">Cancelled</p>
+          <p className="stat-card__value">
+            {analytics?.cancelled ?? (loading ? "…" : "—")}
+          </p>
+          <p className="stat-card__note">Cancelled bookings</p>
+        </article>
+      </div>
+
+      <Panel
+        title="Bookings"
+        meta={`${bookings.length} total · ${analytics?.past ?? 0} past confirmed`}
+        flush
+      >
         {loading ? (
           <LoadingBlock />
         ) : (
@@ -95,7 +150,9 @@ function MeetingBookingsPage() {
                       <strong>
                         {booking.guestName}
                         {booking.status !== "confirmed" ? (
-                          <span className="badge badge--warning">{booking.status}</span>
+                          <span className="badge badge--warning">
+                            {booking.status}
+                          </span>
                         ) : (
                           <span className="badge badge--success">confirmed</span>
                         )}
@@ -105,7 +162,11 @@ function MeetingBookingsPage() {
                         {new Date(booking.startAt).toLocaleString()} ·{" "}
                         {booking.durationMin} min · {booking.locationLabel}
                       </p>
-                      {booking.subject ? <p><em>{booking.subject}</em></p> : null}
+                      {booking.subject ? (
+                        <p>
+                          <em>{booking.subject}</em>
+                        </p>
+                      ) : null}
                       {booking.notes ? <p>{booking.notes}</p> : null}
                       <small>{booking.timezone}</small>
                     </div>

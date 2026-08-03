@@ -17,6 +17,7 @@ import {
   Settings,
   Share2,
   Sparkles,
+  UserRound,
 } from "lucide-react";
 import {
   messagesApi,
@@ -29,6 +30,7 @@ import "./pages.css";
 
 const modules = [
   { to: "/hero", label: "Hero", note: "Identity and opening pitch", icon: Sparkles, group: "Content" },
+  { to: "/about", label: "About", note: "Profile, story, education, experience", icon: UserRound, group: "Content" },
   { to: "/what-i-do", label: "What I Do", note: "Capability cards and process", icon: ListTodo, group: "Content" },
   { to: "/skills", label: "Skill Badges", note: "Floating hero badges", icon: Layers, group: "Content" },
   { to: "/skills-section", label: "Skills Section", note: "Technologies I Work With", icon: PanelsTopLeft, group: "Content" },
@@ -60,14 +62,15 @@ function DashboardPage() {
       projectsApi.list(),
       skillsApi.list(),
       messagesApi.list(),
-      meetingApi.listBookings(),
+      meetingApi.getAnalytics(),
     ]).then(([projects, skills, messages, bookings]) => {
       if (!alive) return;
       setStats({
         projects: projects.status === "fulfilled" ? projects.value.length : "—",
         skills: skills.status === "fulfilled" ? skills.value.length : "—",
         messages: messages.status === "fulfilled" ? messages.value.length : "—",
-        bookings: bookings.status === "fulfilled" ? bookings.value.length : "—",
+        bookings:
+          bookings.status === "fulfilled" ? bookings.value.total : "—",
       });
     });
 

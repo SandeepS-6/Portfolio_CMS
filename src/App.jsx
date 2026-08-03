@@ -54,7 +54,7 @@ function App() {
                     required={["title", "slug"]}
                     fields={[
                       { name: "title" },
-                      { name: "slug", placeholder: "project-atlas" },
+                      { name: "slug", placeholder: "super-admin-mfe" },
                       { name: "summary", type: "textarea" },
                       { name: "description", type: "textarea" },
                       {
